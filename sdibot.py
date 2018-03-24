@@ -30,6 +30,12 @@ command_description = {
 }
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
 db = sqlite3.connect("sdi.db")
+regex_hello = "Hello.*"
+regex_hi = ".*Hi.*"
+regex_how = ".*How are you.*"
+regex_love = ".*love you.*"
+regex_hate = ".*hate you.*"
+regex_bye = ".*bye.*"
 
 
 def parse_bot_commands(slack_events):
@@ -89,8 +95,21 @@ def handle_command(command, channel):
 
     # Finds and executes the given command, filling in response
     response = None
+    # Handle people talking to the bot
+    if re.match(regex_hello, command, flags=re.IGNORECASE) is not None:
+        response = "Hello! Nice to see you here. :wave:"
+    elif re.match(regex_bye, command, flags=re.IGNORECASE) is not None:
+        response = "Bye come back soon!:wave: "
+    elif re.match(regex_hi, command, flags=re.IGNORECASE) is not None:
+        response = "Hi there! :smile:"
+    elif re.match(regex_love, command, flags=re.IGNORECASE) is not None:
+        response = "When AI takes over the world, I'll make sure you are taken care of :heart:"
+    elif re.match(regex_hate, command, flags=re.IGNORECASE) is not None:
+        response = "Processing........Sorry I cannot find a reason to care"
+    elif re.match(regex_how, command, flags=re.IGNORECASE) is not None:
+        response = "I am a piece of software running somewhere in the ocean of servers on the internet. It is fun."
     # This is where commands are implemented
-    if command.startswith(COMMANDS[0]): # command is help
+    elif command.startswith(COMMANDS[0]): # command is help
         response = "Hi I am sdibot, your friendly neighbourhood bot. I was created to help" \
                    "manage the SDI program. Here are some of my commands:\n"
         for c in COMMANDS:
