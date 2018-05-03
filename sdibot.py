@@ -4,6 +4,8 @@ import re
 from slackclient import SlackClient
 import sqlite3
 
+from websocket import WebSocketConnectionClosedException
+
 COMMANDS = ["help",
             "get-phone",
             "get-email",
@@ -235,7 +237,10 @@ if __name__ == "__main__":
                 if command:
                     handle_command(command, channel)
                 time.sleep(RTM_READ_DELAY)
+            except WebSocketConnectionClosedException:
+                slack_client.rtm_connect()
             except Exception as e:
+                slack_client.rtm_connect()
                 print(e)
     else:
         print("Connection failed. Exception traceback printed above.")
